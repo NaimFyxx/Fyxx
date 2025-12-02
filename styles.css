@@ -1,0 +1,580 @@
+/* ===========================
+   CSS Reset & Base Styles
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Christmas Color Palette */
+    --christmas-red: #C41E3A;
+    --christmas-dark-red: #8B0000;
+    --christmas-white: #FFFFFF;
+    --christmas-cream: #F5F5DC;
+    --christmas-green: #0F4C3A;
+    --christmas-dark-green: #0A2F23;
+    --christmas-gold: #D4AF37;
+    --christmas-dark-gold: #85650D;
+    --text-dark: #1a1a1a;
+    --text-light: #FFFFFF;
+
+    /* Typography */
+    --font-heading: 'Libre Baskerville', serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 4rem;
+    --spacing-xxl: 6rem;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-color: var(--christmas-cream);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* ===========================
+   Hero Section
+   =========================== */
+
+.hero {
+    background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-dark-red) 100%);
+    color: var(--text-light);
+    padding: var(--spacing-xxl) 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-badge {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 2px;
+}
+
+.hero-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--christmas-white);
+    text-stroke: 2px var(--christmas-white);
+    display: block;
+}
+
+.hero-logo {
+    margin: var(--spacing-md) auto;
+    max-width: 200px;
+}
+
+.logo-text {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 300;
+    fill: var(--christmas-white);
+}
+
+.hero-subtitle {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-top: var(--spacing-md);
+}
+
+/* Bow Decoration */
+.bow-decoration {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.bow {
+    width: 120px;
+    height: 80px;
+    background: var(--christmas-gold);
+    position: relative;
+    border-radius: 0 0 50% 50%;
+}
+
+.bow::before,
+.bow::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: var(--christmas-gold);
+    border-radius: 50%;
+    top: 10px;
+}
+
+.bow::before {
+    left: -40px;
+    transform: rotate(-20deg);
+}
+
+.bow::after {
+    right: -40px;
+    transform: rotate(20deg);
+}
+
+/* ===========================
+   Section Headers
+   =========================== */
+
+.section-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-header.centered {
+    text-align: center;
+}
+
+.section-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    color: var(--christmas-red);
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+/* ===========================
+   Schedule Section
+   =========================== */
+
+.schedule-section {
+    padding: var(--spacing-xxl) 0;
+    background-color: var(--christmas-white);
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.event-card {
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dark-card {
+    background: linear-gradient(135deg, var(--christmas-green) 0%, var(--christmas-dark-green) 100%);
+    color: var(--text-light);
+}
+
+.light-card {
+    background: var(--christmas-white);
+    color: var(--text-dark);
+    border: 2px solid var(--christmas-cream);
+}
+
+.dark-gold-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+    color: var(--christmas-gold);
+}
+
+.event-badge {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.event-day {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.4;
+}
+
+.event-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 1px;
+}
+
+.event-title-red {
+    color: var(--christmas-red);
+}
+
+.event-title-dark {
+    color: var(--text-dark);
+}
+
+.event-title-script {
+    font-family: 'Brush Script MT', cursive;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.event-subtitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.event-location {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: var(--spacing-md);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.event-logo {
+    margin: var(--spacing-sm) auto 0;
+    max-width: 100px;
+}
+
+.logo-text-small {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 300;
+    fill: var(--text-dark);
+}
+
+/* ===========================
+   Promos Section
+   =========================== */
+
+.promos-section {
+    padding: var(--spacing-xxl) 0;
+    background: linear-gradient(135deg, var(--christmas-cream) 0%, var(--christmas-white) 100%);
+}
+
+.promos-list {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--christmas-white);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.promo-day {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--christmas-cream);
+    transition: background-color 0.3s ease;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.promo-day:last-child {
+    border-bottom: none;
+}
+
+.promo-day:hover {
+    background-color: rgba(196, 30, 58, 0.05);
+}
+
+.day-number {
+    font-weight: 700;
+    color: var(--christmas-red);
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    min-width: 180px;
+}
+
+.promo-description {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.875rem;
+    flex: 1;
+    text-align: right;
+}
+
+/* ===========================
+   CTA Section
+   =========================== */
+
+.cta-section {
+    padding: var(--spacing-xxl) 0;
+    background: linear-gradient(135deg, var(--christmas-green) 0%, var(--christmas-dark-green) 100%);
+    color: var(--text-light);
+    text-align: center;
+}
+
+.cta-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.cta-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--christmas-red);
+    color: var(--text-light);
+    border-color: var(--christmas-red);
+}
+
+.btn-primary:hover {
+    background-color: var(--christmas-dark-red);
+    border-color: var(--christmas-dark-red);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-light);
+    border-color: var(--text-light);
+}
+
+.btn-secondary:hover {
+    background-color: var(--text-light);
+    color: var(--christmas-green);
+    transform: translateY(-2px);
+}
+
+/* ===========================
+   Footer
+   =========================== */
+
+.footer {
+    background-color: var(--text-dark);
+    color: var(--text-light);
+    padding: var(--spacing-lg) 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.footer-logo {
+    max-width: 120px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.logo-text-footer {
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    fill: var(--christmas-white);
+}
+
+.footer-text {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 768px) {
+    .hero {
+        padding: var(--spacing-xl) 0;
+        min-height: 500px;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .promo-day {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .day-number,
+    .promo-description {
+        text-align: left;
+        min-width: 100%;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-xl: 3rem;
+        --spacing-xxl: 4rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .event-title {
+        font-size: 2rem;
+    }
+}
+
+/* ===========================
+   Animations
+   =========================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content {
+    animation: fadeInUp 1s ease-out;
+}
+
+.event-card {
+    animation: fadeInUp 0.8s ease-out backwards;
+}
+
+.event-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.event-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.event-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.event-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.promo-day {
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.promo-day:nth-child(1) { animation-delay: 0.1s; }
+.promo-day:nth-child(2) { animation-delay: 0.15s; }
+.promo-day:nth-child(3) { animation-delay: 0.2s; }
+.promo-day:nth-child(4) { animation-delay: 0.25s; }
+.promo-day:nth-child(5) { animation-delay: 0.3s; }
+.promo-day:nth-child(6) { animation-delay: 0.35s; }
+.promo-day:nth-child(7) { animation-delay: 0.4s; }
+.promo-day:nth-child(8) { animation-delay: 0.45s; }
+.promo-day:nth-child(9) { animation-delay: 0.5s; }
+.promo-day:nth-child(10) { animation-delay: 0.55s; }
+.promo-day:nth-child(11) { animation-delay: 0.6s; }
+.promo-day:nth-child(12) { animation-delay: 0.65s; }
