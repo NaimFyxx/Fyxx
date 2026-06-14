@@ -53,6 +53,21 @@ nav')` from the custom scroll handler to stop console noise on every scroll.
 3. If good, **Publish** that theme (publishing must be done from Shopify admin;
    it is intentionally blocked over the API).
 
+## Issue 2 — `theme.js` xmasButton cleanup (applied to draft 178335023351)
+
+Leftover seasonal "See December Offers" code in `assets/theme.js` registered a
+`MutationObserver` on the entire `document.body` subtree that ran a DOM update +
+`console.log("Mutation Fired!")` on every mutation. It was gated on a
+`#xmasButton` element that no longer exists, so it was dormant — but it was dead
+code, console noise, and a latent INP landmine.
+
+Removed the xmasButton block; kept the license header, console banner, Archetype
+design-mode beacon, and the core `page:loaded` dispatch. The `lion-loyalty`
+snippet (in `theme.liquid`, not this file) was intentionally left in place.
+
+- `theme.original.js` — original file, kept for rollback reference.
+- `theme.js` — cleaned file (matches the staged draft theme).
+
 ## Still open (not yet fixed)
 
 - **Module-specifier errors** (~0.4% of errors): `list.product-card.swatches`,
