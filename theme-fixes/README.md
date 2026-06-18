@@ -68,7 +68,7 @@ snippet (in `theme.liquid`, not this file) was intentionally left in place.
 - `theme.original.js` — original file, kept for rollback reference.
 - `theme.js` — cleaned file (matches the staged draft theme).
 
-## Issue 3 — Safari variant pickers not selectable (PENDING write to draft)
+## Issue 3 — Safari variant pickers not selectable (APPLIED to draft 178335023351)
 
 On Safari only (desktop + mobile), tapping a product variant button (e.g. the
 "Size" options) did nothing — price/availability never updated.
@@ -105,9 +105,9 @@ selects the radio natively, and fires `change`. The button has `type="button"`
 and no handler of its own, so nothing is lost. Scoped to `.variant-button-wrap`
 so Add to cart and other `.element-button`s are unaffected.
 
-NOTE: To apply, read the current source of `assets/overrides.css` from the draft
-theme and append the rule (do NOT overwrite from the CDN copy — that is the
-minified/compiled output, not the source).
+Applied: appended to the end of `assets/overrides.css` in draft theme
+178335023351 (verified, file 2445 → 2715 bytes, no userErrors). All existing
+rules preserved.
 
 ## Still open (not yet fixed)
 

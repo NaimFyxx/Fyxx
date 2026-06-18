@@ -1,24 +1,6 @@
-/* ------------------------------------------------------------------ *
- * Safari fix: variant size buttons not selectable.
- *
- * Each variant button is a <button type="button"> nested inside the
- * <label> that wraps the radio <input>. Per the HTML spec, clicking
- * interactive content (a <button>) inside a <label> suppresses the
- * label's activation behavior, so the radio is never checked and its
- * "change" event never fires. Safari enforces this strictly; Chromium
- * and Firefox are lenient and toggle the radio anyway — hence the bug
- * was Safari-only (desktop + mobile).
- *
- * The variant picker JS (block.product-variant-picker.js) only performs
- * the visible update (price / availability / URL) on the radio's
- * "change" event, so on Safari nothing happened on tap.
- *
- * Making the inner button click-through lets the tap land on the
- * <label>, which selects the radio natively and fires "change". The
- * button has type="button" and no click handler of its own, so it
- * loses no functionality. Scoped to .variant-button-wrap so it cannot
- * affect Add to cart or other .element-button instances.
- * ------------------------------------------------------------------ */
+
+
+/* Safari fix: inner <button> in each variant <label> blocked label activation, so the radio never fired "change". Make it click-through so the tap selects the radio. Scoped to variant buttons. */
 .variant-button-wrap label .element-button {
   pointer-events: none;
 }
