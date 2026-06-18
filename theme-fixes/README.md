@@ -68,6 +68,47 @@ snippet (in `theme.liquid`, not this file) was intentionally left in place.
 - `theme.original.js` — original file, kept for rollback reference.
 - `theme.js` — cleaned file (matches the staged draft theme).
 
+## Issue 3 — Safari variant pickers not selectable (PENDING write to draft)
+
+On Safari only (desktop + mobile), tapping a product variant button (e.g. the
+"Size" options) did nothing — price/availability never updated.
+
+### Root cause
+
+Each variant button is a `<button type="button">` nested inside the `<label>`
+that wraps the radio `<input>`:
+
+```html
+<label class="element-radio" for="…">
+  <input type="radio" name="Size" value="70cl">
+  <button type="button" class="element-button">70cl</button>
+</label>
+```
+
+Per the HTML spec, clicking interactive content (a `<button>`) inside a `<label>`
+suppresses the label's activation behavior, so the radio is never checked and its
+`change` event never fires. Safari enforces this; Chromium/Firefox toggle the
+radio anyway — so the bug was Safari-only. `block.product-variant-picker.js`
+only runs its visible update on the `change` event (the mousedown/touchstart
+handler merely prefetches), so on Safari nothing happened.
+
+### Fix
+
+Append to `assets/overrides.css` (see `overrides.append.css`):
+
+```css
+.variant-button-wrap label .element-button { pointer-events: none; }
+```
+
+This makes the inner button click-through, so the tap lands on the `<label>`,
+selects the radio natively, and fires `change`. The button has `type="button"`
+and no handler of its own, so nothing is lost. Scoped to `.variant-button-wrap`
+so Add to cart and other `.element-button`s are unaffected.
+
+NOTE: To apply, read the current source of `assets/overrides.css` from the draft
+theme and append the rule (do NOT overwrite from the CDN copy — that is the
+minified/compiled output, not the source).
+
 ## Still open (not yet fixed)
 
 - **Module-specifier errors** (~0.4% of errors): `list.product-card.swatches`,
