@@ -82,6 +82,35 @@ manually in the theme editor if desired.
   This lets the tap fall through to the `<label>`, which toggles the radio. The button
   is presentational (`type="button"`), so no functional downside on any browser.
 
+## Header quick-links + slim nav + search jank (added after preview feedback)
+Root cause of the "missing 3 buttons": the live theme renders a custom snippet
+`custom.secondary-menu-header` (authored by NAIM) via a hook in
+`snippets/section.header.liquid`. Neither came across in the 9.1.0 update, so the
+draft fell back to the full 15-item `main-navigation` menu. Header *settings*
+(header-group.json) are byte-identical between live + draft — the difference was
+purely this custom code. (The only thing that ever hid the quick-links was an
+iPad-Air media query in the retired overrides.css.)
+
+Applied to draft 178480546039 (all FYXX CUSTOM-marked):
+- **snippets/custom.secondary-menu-header.liquid** — re-created (cleaned up): renders
+  linklist `secondary-menu-test` (Home/Shop/Rewards) inline on desktop.
+- **Slim desktop nav** (in that same snippet's <style>): surfaces the theme's
+  hamburger at all times on desktop and hides the full 15-item nav row until the
+  hamburger toggles it open (reuses the native compress-menu click handler in
+  header.nav.js — no fragile JS). Quick-links become the primary desktop nav.
+- **snippets/section.header.liquid** — added the `{% render 'custom.secondary-menu-header' %}`
+  hook (same spot the live theme used).
+- **snippets/form.predictive-search.liquid** — added `overscroll-behavior: contain`
+  (+ -webkit-overflow-scrolling) to `.search__results` to stop the results panel's
+  scroll from chaining into the page behind it (likely cause of the "janky" scroll;
+  the desktop typing path never scroll-locks the body). Speculative on exact symptom
+  — needs preview confirmation.
+
+NOTE on possible redundancy: desktop now shows BOTH the quick-links AND (behind the
+hamburger) the full menu. If that feels like too much, easiest options: (a) drop the
+quick-links and keep just the hamburger, or (b) keep quick-links and restructure
+`main-navigation` into nested dropdowns. Decide after previewing.
+
 ## 9.1.0 migration — COMPLETE
 All custom code re-applied to draft 178480546039 and marked FYXX CUSTOM. Remaining
 manual steps for the merchant: preview the draft thoroughly (esp. Safari variant
