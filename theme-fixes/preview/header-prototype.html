@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fyxx header prototype</title>
+<style>
+  :root {
+    --header-bg: #000;
+    --header-fg: #fff;
+    --page-bg: #fff;
+    --accent: #007aff;
+    --nav-fs: 14px;
+    --pill-radius: 999px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #efefef;
+    color: #111;
+  }
+
+  /* ===== Control panel (prototype only — NOT part of the theme) ===== */
+  .controls {
+    position: sticky; top: 0; z-index: 100;
+    background: #14181d; color: #fff;
+    padding: 10px 14px;
+    font-family: -apple-system, system-ui, sans-serif; font-size: 13px;
+    display: flex; flex-wrap: wrap; gap: 16px 22px; align-items: center;
+  }
+  .controls strong { font-weight: 700; margin-right: 4px; }
+  .controls label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; white-space: nowrap; }
+  .controls .group { display: inline-flex; gap: 12px; align-items: center; padding-right: 18px; border-right: 1px solid #333; }
+  .controls .group:last-child { border-right: 0; }
+
+  /* ===== Device frame ===== */
+  .stage { padding: 24px; display: flex; justify-content: center; }
+  .frame {
+    width: 100%; max-width: 1280px;
+    background: var(--page-bg);
+    box-shadow: 0 8px 40px rgba(0,0,0,.18);
+    overflow: hidden;
+    position: relative;
+  }
+  body.is-mobile .frame { max-width: 390px; }
+
+  /* ===== Announcement bar ===== */
+  .announce {
+    background: var(--header-bg); color: var(--header-fg);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 18px; font-family: -apple-system, system-ui, sans-serif;
+  }
+  .announce p { margin: 0; font-size: 13px; font-weight: 700; }
+  .announce .social { display: flex; gap: 12px; }
+  .announce .social span { width: 16px; height: 16px; border-radius: 50%; background: #fff; display: inline-block; opacity: .9; }
+  body.is-mobile .announce .social { display: none; }
+
+  /* ===== Header top row ===== */
+  .site-header { background: var(--header-bg); color: var(--header-fg); position: relative; z-index: 30; }
+  .header-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 18px;
+  }
+
+  .icon-btn {
+    background: none; border: 0; color: var(--header-fg);
+    width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0; flex: 0 0 auto;
+  }
+  .icon-btn svg { width: 22px; height: 22px; stroke: #fff; }
+
+  .logo {
+    flex: 0 0 auto; font-style: italic; font-weight: 400;
+    font-size: 30px; letter-spacing: .5px; color: #fff; line-height: 1;
+    text-decoration: none;
+  }
+
+  /* Search ---------------------------------------------------- */
+  .search { flex: 1 1 auto; max-width: 520px; position: relative; }
+  body.is-mobile .search { max-width: none; }
+
+  /* DEFAULT (current/broken): square wrap border + pill input inside */
+  .search .wrap {
+    position: relative; display: flex; align-items: center;
+    background: transparent;
+  }
+  .search input {
+    width: 100%; height: 40px;
+    background: transparent; color: #fff;
+    border: 1px solid #fff;            /* this is the "square" */
+    border-radius: 6px;
+    padding: 0 40px 0 16px; font-size: 15px;
+    font-family: -apple-system, system-ui, sans-serif;
+    outline: none;
+  }
+  .search input::placeholder { color: rgba(255,255,255,.8); }
+  .search .search-ico { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  .search .search-ico svg { width: 20px; height: 20px; stroke: #fff; opacity: .8; }
+
+  /* FIXED: single pill, border matches the rounded input */
+  body[data-search="pill"] .search input { border-radius: var(--pill-radius); padding-left: 18px; }
+
+  /* FIXED alt: filled pill, no outline */
+  body[data-search="filled"] .search input {
+    border-color: transparent; border-radius: var(--pill-radius);
+    background: rgba(255,255,255,.14);
+  }
+
+  /* Quick links ---------------------------------------------- */
+  .quick { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+  .quick a {
+    color: #fff; text-decoration: none; font-size: var(--nav-fs);
+    font-family: -apple-system, system-ui, sans-serif;
+    padding: 6px 10px; white-space: nowrap; border-radius: 6px;
+  }
+  .quick a:hover { text-decoration: underline; }
+  body.is-mobile .quick { display: none; }
+  body[data-quick="off"] .quick { display: none; }
+
+  .actions { display: flex; gap: 6px; align-items: center; flex: 0 0 auto; }
+  .actions .label { font-family: -apple-system, system-ui, sans-serif; font-size: var(--nav-fs); color: #fff; margin-left: 4px; }
+  body.is-mobile .actions .label { display: none; }
+
+  /* ===== Full menu row (desktop) ===== */
+  .fullnav {
+    background: var(--header-bg); color: var(--header-fg);
+    border-top: 1px solid rgba(255,255,255,.12);
+    overflow: hidden;
+  }
+  .fullnav ul {
+    list-style: none; margin: 0; padding: 6px 18px;
+    display: flex; flex-wrap: wrap; gap: 2px 4px;
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  .fullnav a {
+    color: #fff; text-decoration: none; font-size: var(--nav-fs);
+    padding: 10px 12px; display: inline-block; white-space: nowrap;
+  }
+  .fullnav a:hover { text-decoration: underline; }
+
+  /* Slim mode: full row hidden until hamburger toggles it (desktop) */
+  body[data-fullmenu="slim"] .fullnav { max-height: 0; transition: max-height .3s cubic-bezier(.18,.77,.58,1); }
+  body[data-fullmenu="slim"] .fullnav.open { max-height: 200px; }
+  body[data-fullmenu="always"] .fullnav { max-height: none; }
+  body[data-fullmenu="always"] .header-row .hamburger { display: none; }
+
+  /* On mobile the desktop full row is never shown; we use the drawer instead */
+  body.is-mobile .fullnav { display: none; }
+  body.is-mobile .header-row .hamburger { display: inline-flex; }
+  /* desktop: hamburger only shows in slim mode */
+  body:not(.is-mobile)[data-fullmenu="always"] .hamburger { display: none; }
+
+  /* ===== Search overlay + results ===== */
+  .screen {
+    position: absolute; inset: 0; background: rgba(0,0,0,.45);
+    opacity: 0; visibility: hidden; transition: opacity .2s ease; z-index: 25;
+  }
+  body[data-overlay="off"] .screen { display: none; }
+  .frame.search-active .screen { opacity: 1; visibility: visible; }
+
+  .results {
+    position: absolute; left: 0; right: 0; top: 100%;
+    background: #fff; color: #111;
+    box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    max-height: 60vh; overflow: auto; overscroll-behavior: contain;
+    display: none; z-index: 40; padding: 18px;
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  .search.open .results { display: block; }
+  .results h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #777; }
+  .results .row { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .results .row:last-child { border-bottom: 0; }
+  .results .thumb { width: 44px; height: 44px; background: #ddd; border-radius: 6px; flex: 0 0 auto; }
+  .results .row b { font-size: 14px; } .results .row span { display: block; font-size: 12px; color: #888; }
+
+  /* ===== Mobile drawer ===== */
+  .drawer {
+    position: absolute; top: 0; bottom: 0; left: 0; width: 80%; max-width: 320px;
+    background: #000; color: #fff; transform: translateX(-100%);
+    transition: transform .28s cubic-bezier(.18,.77,.58,1); z-index: 60;
+    padding: 18px; overflow-y: auto;
+  }
+  .frame.drawer-open .drawer { transform: translateX(0); }
+  .drawer .close { position: absolute; top: 12px; right: 12px; }
+  .drawer h4 { font-family: -apple-system, system-ui, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 18px 0 6px; }
+  .drawer a { display: block; color: #fff; text-decoration: none; padding: 12px 4px; font-family: -apple-system, system-ui, sans-serif; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .drawer-scrim { position: absolute; inset: 0; background: rgba(0,0,0,.4); opacity: 0; visibility: hidden; transition: opacity .2s; z-index: 55; }
+  .frame.drawer-open .drawer-scrim { opacity: 1; visibility: visible; }
+
+  /* ===== Faux page content (for context / scroll) ===== */
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #f7e9e9; }
+  body.is-mobile .hero { grid-template-columns: 1fr; }
+  .hero .copy { padding: 48px 40px; }
+  .hero .eyebrow { font-size: 14px; color: #555; font-family: -apple-system, system-ui, sans-serif; }
+  .hero h1 { font-size: 56px; margin: 8px 0 16px; line-height: 1; }
+  body.is-mobile .hero h1 { font-size: 38px; }
+  .hero p { font-size: 18px; color: #333; max-width: 380px; }
+  .hero .btn { display: inline-block; margin-top: 20px; background: #000; color: #fff; padding: 14px 26px; text-decoration: none; font-family: -apple-system, system-ui, sans-serif; }
+  .hero .img { background: #cbb; min-height: 380px; background-image: linear-gradient(135deg,#b9a 0,#776 100%); }
+  .filler { padding: 60px 40px; font-family: -apple-system, system-ui, sans-serif; color: #444; }
+</style>
+</head>
+<body class="" data-fullmenu="slim" data-quick="on" data-search="pill" data-overlay="on">
+
+  <!-- CONTROL PANEL (prototype only) -->
+  <div class="controls">
+    <span class="group"><strong>View:</strong>
+      <label><input type="radio" name="view" value="desktop" checked> Desktop</label>
+      <label><input type="radio" name="view" value="mobile"> Mobile</label>
+    </span>
+    <span class="group"><strong>Full menu:</strong>
+      <label><input type="radio" name="fullmenu" value="slim" checked> Behind hamburger (slim)</label>
+      <label><input type="radio" name="fullmenu" value="always"> Always visible row</label>
+    </span>
+    <span class="group"><strong>Quick links:</strong>
+      <label><input type="radio" name="quick" value="on" checked> On</label>
+      <label><input type="radio" name="quick" value="off"> Off</label>
+    </span>
+    <span class="group"><strong>Search bar:</strong>
+      <label><input type="radio" name="search" value="pill" checked> Pill outline</label>
+      <label><input type="radio" name="search" value="filled"> Filled pill</label>
+      <label><input type="radio" name="search" value="square"> Square (current)</label>
+    </span>
+    <span class="group"><strong>Search overlay:</strong>
+      <label><input type="radio" name="overlay" value="on" checked> On</label>
+      <label><input type="radio" name="overlay" value="off"> Off</label>
+    </span>
+  </div>
+
+  <div class="stage">
+    <div class="frame" id="frame">
+
+      <!-- search dim backdrop -->
+      <div class="screen" id="screen"></div>
+
+      <!-- announcement -->
+      <div class="announce">
+        <p>Get Your Fyxx Daily from 10 AM till Midnight</p>
+        <div class="social"><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- header top row -->
+      <header class="site-header">
+        <div class="header-row">
+          <button class="icon-btn hamburger" id="hamburger" aria-label="Menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+
+          <a href="#" class="logo">fyxx</a>
+
+          <div class="search" id="search">
+            <div class="wrap">
+              <input type="search" id="searchInput" placeholder="Search">
+              <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+            </div>
+            <div class="results" id="results">
+              <h4>Products</h4>
+              <div class="row"><div class="thumb"></div><div><b>Broc Cellars | Wirth Vineyard Zinfandel</b><span>Red Wine · 65.000 JD</span></div></div>
+              <div class="row"><div class="thumb"></div><div><b>Example Gin 70cl</b><span>Spirits · 28.000 JD</span></div></div>
+              <div class="row"><div class="thumb"></div><div><b>Example IPA 6-pack</b><span>Beer · 12.000 JD</span></div></div>
+            </div>
+          </div>
+
+          <nav class="quick">
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Rewards</a>
+          </nav>
+
+          <div class="actions">
+            <button class="icon-btn" aria-label="Account">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </button>
+            <button class="icon-btn" aria-label="Cart">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M6 6L5 3H2"/></svg>
+            </button>
+            <span class="label">Cart</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- full menu row (desktop) -->
+      <div class="fullnav" id="fullnav">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Buy Wines ▾</a></li>
+          <li><a href="#">Buy Spirits ▾</a></li>
+          <li><a href="#">Buy Beer ▾</a></li>
+          <li><a href="#">Buy Cigars ▾</a></li>
+          <li><a href="#">Dukkan ▾</a></li>
+          <li><a href="#">Gifts ▾</a></li>
+          <li><a href="#">The Shop</a></li>
+          <li><a href="#">The Green Room</a></li>
+          <li><a href="#">Book a Table</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Fyxx Rewards</a></li>
+        </ul>
+      </div>
+
+      <!-- mobile drawer -->
+      <div class="drawer-scrim" id="drawerScrim"></div>
+      <aside class="drawer" id="drawer">
+        <button class="icon-btn close" id="drawerClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <h4>Menu</h4>
+        <a href="#">Home</a><a href="#">About Us</a><a href="#">Buy Wines</a><a href="#">Buy Spirits</a>
+        <a href="#">Buy Beer</a><a href="#">Buy Cigars</a><a href="#">Dukkan</a><a href="#">Gifts</a>
+        <a href="#">The Shop</a><a href="#">The Green Room</a><a href="#">Book a Table</a><a href="#">Events</a>
+        <a href="#">Contact Us</a><a href="#">Blog</a><a href="#">Fyxx Rewards</a>
+      </aside>
+
+      <!-- faux page content -->
+      <section class="hero">
+        <div class="copy">
+          <div class="eyebrow">The Green Room</div>
+          <h1>Tapas &amp; Cocktails</h1>
+          <p>Tucked behind a hidden door is an intimate space built around music, food, and drinks.</p>
+          <a href="#" class="btn">Book a Table</a>
+        </div>
+        <div class="img"></div>
+      </section>
+      <div class="filler">Scroll down to test the sticky/scroll behaviour and the search overlay over real content. Use the controls at the top to compare options for desktop and mobile.</div>
+      <div class="filler" style="background:#fafafa">More content…</div>
+    </div>
+  </div>
+
+<script>
+  const body = document.body;
+  const frame = document.getElementById('frame');
+  const fullnav = document.getElementById('fullnav');
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('drawer');
+  const drawerScrim = document.getElementById('drawerScrim');
+  const drawerClose = document.getElementById('drawerClose');
+  const search = document.getElementById('search');
+  const searchInput = document.getElementById('searchInput');
+  const screen = document.getElementById('screen');
+
+  // control panel
+  document.querySelectorAll('.controls input').forEach(inp => {
+    inp.addEventListener('change', e => {
+      const { name, value } = e.target;
+      if (name === 'view') { body.classList.toggle('is-mobile', value === 'mobile'); closeAll(); }
+      else { body.dataset[name] = value; }
+    });
+  });
+
+  // hamburger: desktop -> toggle full row; mobile -> open drawer
+  hamburger.addEventListener('click', () => {
+    if (body.classList.contains('is-mobile')) {
+      frame.classList.add('drawer-open');
+    } else {
+      fullnav.classList.toggle('open');
+      hamburger.classList.toggle('is-on');
+    }
+  });
+  drawerClose.addEventListener('click', () => frame.classList.remove('drawer-open'));
+  drawerScrim.addEventListener('click', () => frame.classList.remove('drawer-open'));
+
+  // search activate
+  function openSearch() {
+    search.classList.add('open');
+    frame.classList.add('search-active');
+  }
+  function closeSearch() {
+    search.classList.remove('open');
+    frame.classList.remove('search-active');
+  }
+  searchInput.addEventListener('focus', openSearch);
+  searchInput.addEventListener('input', openSearch);
+  screen.addEventListener('click', closeSearch);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); frame.classList.remove('drawer-open'); } });
+
+  function closeAll() { closeSearch(); frame.classList.remove('drawer-open'); fullnav.classList.remove('open'); }
+</script>
+</body>
+</html>
