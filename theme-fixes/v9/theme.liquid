@@ -34,6 +34,17 @@
     {%- endcomment -%}
     {%- comment -%} ===== END FYXX CUSTOM ===== {%- endcomment -%}
 
+    {%- comment -%}
+      ===== FYXX CUSTOM: Apple Smart App Banner =====
+      iOS Safari shows a native banner that auto-detects whether the Fyxx app is
+      installed: it says "Open" if it is, "Get" if it isn't. This is the only
+      reliable way for the web to know the app is installed on iOS, so the custom
+      "Download the App" floater further down is now Android-only.
+      app-id 1489325138 = "Fyxx: Premium Drinks Delivered" on the App Store.
+    {%- endcomment -%}
+    <meta name="apple-itunes-app" content="app-id=1489325138">
+    {%- comment -%} ===== END FYXX CUSTOM ===== {%- endcomment -%}
+
     {%- if settings.favicon != blank -%}
       <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
     {%- endif -%}
@@ -181,6 +192,13 @@
                 var ua = navigator.userAgent || navigator.vendor || window.opera;
                 return /android/i.test(ua) || (/iPad|iPhone|iPod/.test(ua) && !window.MSStream);
               }
+              function isIOS() {
+                // FYXX CUSTOM: iOS uses Apple's native Smart App Banner (apple-itunes-app
+                // meta in <head>), which detects install state. So this custom floater
+                // is suppressed on iOS and only shown on Android.
+                var ua = navigator.userAgent || navigator.vendor || window.opera;
+                return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+              }
               function forceShow() {
                 return hasParam('show_floater');
               }
@@ -281,8 +299,9 @@
                   var looksLikeAppUA = uaLooksLikeApp();
 
                   // Show ONLY on mobile devices that (we believe) don't have the app,
-                  // unless developer forces show via ?show_floater=1
-                  var allow = (forceShow() || isMobile()) && !hasAppCookie && !looksLikeAppUA;
+                  // unless developer forces show via ?show_floater=1.
+                  // FYXX CUSTOM: exclude iOS — iPhones use the native Smart App Banner instead.
+                  var allow = (forceShow() || isMobile()) && !isIOS() && !hasAppCookie && !looksLikeAppUA;
                   if (!allow) return;
 
                   let visit = parseInt(getCookie('PAFloaterVisitCount')) || 0;
