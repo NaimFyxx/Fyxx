@@ -28,3 +28,18 @@ cleanest long-term fix is a single guard at the top of `list.product-card.liquid
   samita-custom render. SKIP obsolete: shogun/pagefly includes (apps removed),
   xmasButton (dead seasonal code).
 - assets/theme.js — already clean/identical on 9.1.0; nothing to do.
+
+---
+## Update — decisions applied
+- **overrides.css** — NOT migrated (Christmas hides + iPad-Air media queries
+  dropped per request). Safari variant fix: pending a check of 9.1.0 markup.
+- **header.nav.js** — DONE. Migrated the "close compressed nav on scroll" feature,
+  improved: passive listener, reuses cached refs, animates shut via
+  prepareTransition (matches the open), null-safe. Wrapped in FYXX CUSTOM markers.
+- **theme.liquid** — TO DO. Carry all custom blocks EXCEPT the friday redirect
+  (and the already-excluded PageFly/Shogun includes + xmasButton).
+
+## Custom-code marker convention (so customizations are easy to find later)
+- Liquid: `{% comment %} FYXX CUSTOM: ... {% endcomment %}` ... `{% comment %} END FYXX CUSTOM {% endcomment %}`
+- JS / CSS: `/* ===== FYXX CUSTOM: ... ===== */` ... `/* ===== END FYXX CUSTOM ===== */`
+- TODO: retrofit the oos-hidden wraps (collection/search/featured-collection) with these markers.
