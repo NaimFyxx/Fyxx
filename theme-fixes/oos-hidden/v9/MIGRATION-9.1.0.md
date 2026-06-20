@@ -43,3 +43,32 @@ cleanest long-term fix is a single guard at the top of `list.product-card.liquid
 - Liquid: `{% comment %} FYXX CUSTOM: ... {% endcomment %}` ... `{% comment %} END FYXX CUSTOM {% endcomment %}`
 - JS / CSS: `/* ===== FYXX CUSTOM: ... ===== */` ... `/* ===== END FYXX CUSTOM ===== */`
 - TODO: retrofit the oos-hidden wraps (collection/search/featured-collection) with these markers.
+
+---
+## theme.liquid + SEO — DONE
+Merged into 9.1.0 theme.liquid (all FYXX CUSTOM-marked):
+- **FYXX CUSTOM SEO**: google-site-verification, facebook-domain-verification x2,
+  keywords meta, robots meta (`index, follow, nocache`). These ARE the SEO agency's
+  changes — confirmed by checking the old live theme 173678428407.
+- Microsoft Clarity, Dunbar Text web font, PA Floater (app-download banner),
+  Lion-loyalty icon tweak.
+- Commented-out GA(UA) block kept for reference (still inactive).
+- EXCLUDED: friday.myfyxx.com redirect, PageFly/Shogun includes, xmasButton,
+  and the commented-out NAIM/SAMI seasonal sections.
+
+### SEO investigation (source of truth: previous live theme 173678428407)
+- `templates/robots.txt.liquid`: does NOT exist → Shopify default robots.txt (nothing custom to carry).
+- `snippets/head.page-title.liquid` & `snippets/head.social-meta-tags.liquid`:
+  byte-identical to stock Archetype (only the doc-comment format differs) → NO agency changes there.
+- No `seo` / `schema` / `json-ld` / `structured-data` / `hreflang` / `organization` snippet exists.
+- Conclusion: the SEO agency's work = the theme.liquid head metas above, now migrated + marked FYXX CUSTOM SEO.
+
+### Samita
+Samita is a Shopify app (applies automatically on publish). The old `samita-custom.liquid`
+theme override was NOT migrated. NOTE: an orphaned `snippets/samita-custom.liquid` was briefly
+created then de-referenced from theme.liquid (API can't delete files) — it is inert; delete it
+manually in the theme editor if desired.
+
+## Still open
+- Retrofit FYXX CUSTOM markers onto the oos-hidden wraps (collection/search/featured-collection).
+- Safari variant-picker fix: verify whether 9.1.0's variant markup still needs it.
