@@ -69,6 +69,21 @@ theme override was NOT migrated. NOTE: an orphaned `snippets/samita-custom.liqui
 created then de-referenced from theme.liquid (API can't delete files) — it is inert; delete it
 manually in the theme editor if desired.
 
-## Still open
-- Retrofit FYXX CUSTOM markers onto the oos-hidden wraps (collection/search/featured-collection).
-- Safari variant-picker fix: verify whether 9.1.0's variant markup still needs it.
+## Markers + Safari fix — DONE
+- **oos-hidden markers** — retrofitted FYXX CUSTOM markers onto all three wraps
+  (collection / search / featured-collection: both carousel + grid loops). Upserted
+  to draft 178480546039.
+- **Safari variant-picker fix** — DONE. Verified 9.1.0 still nests
+  `<button type="button">` (from element.button) inside the radio `<label>` within
+  `.variant-button-wrap`, so the bug persists. Instead of overrides.css (retired), the
+  fix is co-located in `snippets/block.product-variant-picker.button.liquid` as a
+  `{% stylesheet %}` block (FYXX CUSTOM-marked):
+  `.variant-button-wrap label .element-button, .variant-button-wrap label button { pointer-events: none; }`
+  This lets the tap fall through to the `<label>`, which toggles the radio. The button
+  is presentational (`type="button"`), so no functional downside on any browser.
+
+## 9.1.0 migration — COMPLETE
+All custom code re-applied to draft 178480546039 and marked FYXX CUSTOM. Remaining
+manual steps for the merchant: preview the draft thoroughly (esp. Safari variant
+tapping + OOS hiding on collections/search/homepage), then publish; optionally delete
+the orphaned `snippets/samita-custom.liquid` in the theme editor.

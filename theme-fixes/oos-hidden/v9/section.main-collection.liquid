@@ -72,9 +72,11 @@
     else
       paginate collection.products by paginate_by
         for item in collection.products
+          # FYXX CUSTOM: hide products tagged oos-hidden from the collection grid
           unless item.tags contains 'oos-hidden'
             render 'list.product-card', product: item, product_grid_content_align: product_grid_content_align
           endunless
+          # END FYXX CUSTOM
         endfor
 
         if paginate.pages > 1

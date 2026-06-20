@@ -72,9 +72,11 @@
       paginate search.results by paginate_by
         for item in search.results
           if item.object_type == 'product'
+            # FYXX CUSTOM: hide products tagged oos-hidden from search results
             unless item.tags contains 'oos-hidden'
               render 'list.product-card', product: item
             endunless
+            # END FYXX CUSTOM
           else
             render 'list.search-card', item: item
           endif
