@@ -198,7 +198,7 @@
             <span class="fyxx-cd-amount" data-cd-subtotal>{{ cart.total_price | money }}</span>
           </div>
           <p class="fyxx-cd-note">Shipping &amp; taxes calculated at checkout.</p>
-          <button type="submit" name="checkout" class="fyxx-cd-checkout">Checkout</button>
+          <button type="submit" name="checkout" class="fyxx-cd-checkout" data-cd-checkout>Checkout</button>
           {%- if additional_checkout_buttons -%}
             <div class="fyxx-cd-dynamic">{{ content_for_additional_checkout_buttons }}</div>
           {%- endif -%}
@@ -246,9 +246,12 @@
       // The header cart icon asks us to open via this event (it never auto-opens on add).
       document.addEventListener('fyxx-cart:open', open);
 
-      // delegated close
+      // delegated close + checkout
       root.addEventListener('click', function (e) {
-        if (e.target.closest('[data-cd-close]')) { e.preventDefault(); close(); }
+        if (e.target.closest('[data-cd-close]')) { e.preventDefault(); close(); return; }
+        // Checkout: navigate straight to /checkout so the theme's cart JS can't swallow the submit.
+        var co = e.target.closest('[data-cd-checkout]');
+        if (co) { e.preventDefault(); window.location.href = routeRoot + 'checkout'; return; }
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && root.classList.contains('is-open')) close();
