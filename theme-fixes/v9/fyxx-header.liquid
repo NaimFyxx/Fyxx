@@ -38,9 +38,10 @@
     --pill-radius: 999px;
     --btn-radius:  12px;
     --nav-fs:      14px;
-    --ui-font:     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
-    --serif:       Georgia, "Times New Roman", serif;
-    --button-font: var(--ui-font);
+    /* FYXX: use the theme's own configured fonts (do not override the brand font) */
+    --ui-font:     var(--element-text-font-family--body), var(--element-text-font-family-fallback--body);
+    --serif:       var(--element-text-font-family--heading), var(--element-text-font-family-fallback--heading);
+    --button-font: var(--element-text-font-family--heading), var(--element-text-font-family-fallback--heading);
   }
 
   fyxx-header[data-theme="white"] {
@@ -81,7 +82,15 @@
     font-size: 32px; line-height: 1; letter-spacing: .2px; color: var(--header-fg); text-decoration: none;
   }
   .fyxx-logo:hover { color: var(--header-fg); }
-  .fyxx-logo img { display: block; max-height: 38px; width: auto; }
+  .fyxx-logo-img { display: block; height: 34px; width: auto; }
+  .fyxx-logo--light { display: none; }
+  fyxx-header[data-theme="black"] .fyxx-logo--dark { display: none; }
+  fyxx-header[data-theme="black"] .fyxx-logo--light { display: block; }
+  .fyxx-drawer__head .fyxx-logo-img { height: 26px; }
+  .fyxx-slogan { display: block; height: 30px; width: auto; margin: 0 auto; }
+  .fyxx-slogan--light { display: none; }
+  fyxx-header[data-theme="black"] .fyxx-slogan--dark { display: none; }
+  fyxx-header[data-theme="black"] .fyxx-slogan--light { display: block; }
 
   /* ---- account / greeting ---- */
   .fyxx-welcome { display: none; font-size: 13px; color: var(--header-fg); white-space: nowrap; margin-right: 6px; }
@@ -297,10 +306,9 @@
         <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
 
-      <a href="{{ routes.root_url }}" class="fyxx-logo">
-        {%- if section.settings.logo != blank -%}
-          <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}" width="160" height="38" loading="eager">
-        {%- else -%}fyxx{%- endif -%}
+      <a href="{{ routes.root_url }}" class="fyxx-logo" aria-label="{{ shop.name | escape }}">
+        <img class="fyxx-logo-img fyxx-logo--dark" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/fyxx_logo_black_80fed8f3-3062-4b6b-b3ac-85923027c518.svg?v=1782036836" alt="{{ shop.name | escape }}" width="120" height="34" loading="eager">
+        <img class="fyxx-logo-img fyxx-logo--light" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/Fyxx_Logo_White_fcf94a36-1ae9-4622-8ac7-e476ff44c2b1.svg?v=1782036836" alt="{{ shop.name | escape }}" width="120" height="34" loading="eager">
       </a>
 
       <div class="fyxx-search">
@@ -370,7 +378,10 @@
   <div class="fyxx-scrim" data-drawer-close></div>
   <aside class="fyxx-drawer" aria-label="Menu">
     <div class="fyxx-drawer__head">
-      <span class="fyxx-logo">fyxx</span>
+      <a href="{{ routes.root_url }}" class="fyxx-logo" aria-label="{{ shop.name | escape }}">
+        <img class="fyxx-logo-img fyxx-logo--dark" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/fyxx_logo_black_80fed8f3-3062-4b6b-b3ac-85923027c518.svg?v=1782036836" alt="{{ shop.name | escape }}" width="100" height="26" loading="lazy">
+        <img class="fyxx-logo-img fyxx-logo--light" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/Fyxx_Logo_White_fcf94a36-1ae9-4622-8ac7-e476ff44c2b1.svg?v=1782036836" alt="{{ shop.name | escape }}" width="100" height="26" loading="lazy">
+      </a>
       <button class="fyxx-icon-btn" type="button" aria-label="Close menu" data-drawer-close>
         <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
@@ -404,7 +415,8 @@
     {%- endif -%}
 
     <div class="fyxx-drawer__foot">
-      <span class="fyxx-drawer__tagline">{{ tagline }}</span>
+      <img class="fyxx-slogan fyxx-slogan--dark" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/fyxx-slogan-black.svg?v=1782037158" alt="{{ tagline | escape }}" loading="lazy">
+      <img class="fyxx-slogan fyxx-slogan--light" src="https://cdn.shopify.com/s/files/1/0108/6328/0224/files/fyxx-slogan-white.svg?v=1782037158" alt="{{ tagline | escape }}" loading="lazy">
     </div>
   </aside>
 
