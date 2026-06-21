@@ -75,6 +75,11 @@
       "settings": {
       }
     },
+    "fyxx_cart_drawer": {
+      "type": "fyxx-cart-drawer",
+      "settings": {
+      }
+    },
     "advanced_content_dGEXBC": {
       "type": "advanced-content",
       "blocks": {
@@ -108,6 +113,7 @@
     "toolbar",
     "scrolling_text_FAzeyT",
     "header",
+    "fyxx_cart_drawer",
     "advanced_content_dGEXBC",
     "blocks_R6CxcY"
   ]

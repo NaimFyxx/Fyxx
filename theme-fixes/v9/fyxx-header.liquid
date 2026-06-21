@@ -279,13 +279,11 @@
   endcapture
 -%}
 
-{%- capture mini_cart -%}{%- render 'header.cart-drawer' -%}{%- endcapture -%}
-
 {%- capture cart_link -%}
-  <a href="{{ routes.cart_url }}" id="HeaderCartTrigger" aria-controls="HeaderCart"
-     class="fyxx-icon-btn fyxx-cart" aria-label="{% render 'utility.translate', key: 'labels.cart', fallback: 'Cart' %}">
+  <a href="{{ routes.cart_url }}" id="HeaderCartTrigger" class="fyxx-icon-btn fyxx-cart" data-fyxx-cart-open
+     aria-label="{% render 'utility.translate', key: 'labels.cart', fallback: 'Cart' %}">
     <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.6 9.5a1 1 0 0 1-1 .8H8.6a1 1 0 0 1-1-.8L6 6z"/><path d="M6 6L5.2 3H2.5"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/></svg>
-    {%- if cart.item_count > 0 -%}<span class="fyxx-cart-count">{{ cart.item_count }}</span>{%- endif -%}
+    <span class="fyxx-cart-count"{% if cart.item_count == 0 %} style="display:none"{% endif %}>{{ cart.item_count }}</span>
   </a>
 {%- endcapture -%}
 
@@ -343,19 +341,17 @@
           </a>
         {%- endif -%}
 
-        {%- render 'header.toggle-cart', cart_link: cart_link -%}
+        {{ cart_link }}
       </div>
     </div>
   </div>
 
-  {%- comment -%} cart drawer (theme component; slides down) {%- endcomment -%}
-  <div class="page-width site-header__drawers">
-    <div class="site-header__drawers-container">
-      {%- unless request.page_type == 'cart' -%}
-        {%- render 'header.drawer', slot: mini_cart, open: 'cart:open', close: 'cart:close', class: 'site-header__cart' -%}
-      {%- endunless -%}
-    </div>
-  </div>
+  {%- comment -%}
+    Cart: the slide-in cart drawer lives in its own section (fyxx-cart-drawer) in the
+    header group. The cart icon above opens it via the 'fyxx-cart:open' event (see script).
+    The theme's slide-down cart (header.drawer / header.cart-drawer) is intentionally NOT
+    rendered here, so adding to cart never auto-pops a drawer.
+  {%- endcomment -%}
 
   {%- comment -%} main menu row (desktop) {%- endcomment -%}
   {%- if menu != blank -%}
@@ -439,6 +435,14 @@
 
       root.querySelectorAll('[data-drawer-open]').forEach(function (b) { b.addEventListener('click', openDrawer); });
       root.querySelectorAll('[data-drawer-close]').forEach(function (b) { b.addEventListener('click', closeDrawer); });
+
+      // cart icon opens the slide-in cart drawer (fyxx-cart-drawer section); it never auto-opens on add
+      root.querySelectorAll('[data-fyxx-cart-open]').forEach(function (b) {
+        b.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.dispatchEvent(new CustomEvent('fyxx-cart:open'));
+        });
+      });
 
       // desktop dropdowns (click; hover handled in CSS)
       var dItems = root.querySelectorAll('.fyxx-mainnav__item.has-submenu');
