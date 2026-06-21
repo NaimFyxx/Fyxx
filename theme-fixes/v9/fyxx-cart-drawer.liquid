@@ -162,7 +162,8 @@
                     <div class="fyxx-cd-item__variant">{{ item.selling_plan_allocation.selling_plan.name }}</div>
                   {%- endif -%}
                   {%- for prop in item.properties -%}
-                    {%- if prop.last != blank and prop.first contains '_' == false -%}
+                    {%- assign prop_key = prop.first | slice: 0 -%}
+                    {%- if prop.last != blank and prop_key != '_' -%}
                       <div class="fyxx-cd-item__variant">{{ prop.first }}: {{ prop.last }}</div>
                     {%- endif -%}
                   {%- endfor -%}
