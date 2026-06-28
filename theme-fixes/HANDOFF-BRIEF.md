@@ -82,3 +82,32 @@ implemented on the Fyxx Shopify storefront in prior sessions.
 - Cart-related apps (gift wrap/options, upsells, auto-add) historically injected into the theme's
   native cart; with the custom drawer, verify they still surface where needed.
 - Older theme backups exist in the library (e.g. `178496667895` V.5.2, `178335023351` V.5.0).
+
+## Cleanup tasks (do in the repo → commit → push `main`)
+
+### A. Remove orphaned past-campaign files (KEEP all birthday files)
+Confirmed unreferenced in any section group, `theme.liquid`, or template (audited via Admin API).
+**Prereq (Shopify admin, manual):** the page **"Fyxx Friday"** (`/pages/fyxx-friday`) is still assigned
+the `black-friday` template — reassign it to **Default page** (Pages → Fyxx Friday → Theme template)
+BEFORE deleting the template, or that page breaks. (It already renders as a plain page, so no visible change.)
+Then:
+```bash
+git grep -n "black-friday\|bf-bTM-sticky\|custom-go-to-xmas-btn"   # should only show the files themselves
+git rm sections/black-friday.liquid \
+       sections/bf-bTM-sticky.liquid \
+       sections/custom-go-to-xmas-btn.liquid \
+       templates/page.black-friday.json
+git commit -m "Remove orphaned past-campaign files (Black Friday + Xmas button)"
+git push origin main
+```
+**DO NOT delete** `sections/birthday-gift.liquid` or `templates/page.birthday-gift.json`.
+
+### B. Tag the birthday files as ours (FYXX CUSTOM markers)
+The birthday flow is live: page **"Birthday Gift Unlocked"** (`/pages/birthday-gift-unlocked`) →
+`birthday-gift` template → Klaviyo `?gift=` tracking. Mark these so future audits recognize them:
+- `sections/birthday-gift.liquid` — add at the very top:
+  `{% comment %} ===== FYXX CUSTOM: Birthday landing for the Klaviyo birthday flow (/pages/birthday-gift-unlocked). Keep. ===== {% endcomment %}`
+- `templates/page.birthday-gift.json` — add a `FYXX CUSTOM: Klaviyo birthday flow template — keep`
+  line inside the leading `/* ... */` comment block.
+Commit + push. Then verify `/pages/birthday-gift-unlocked` and the (now Default) Fyxx Friday page still load,
+and no Black Friday / Xmas floating buttons appear anywhere.
